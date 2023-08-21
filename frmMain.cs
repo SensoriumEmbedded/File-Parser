@@ -188,47 +188,43 @@ namespace Text_File_Parser
             if (openFileDialog1.ShowDialog() == DialogResult.Cancel) return;
 
             WriteToOutput("C64 CRT file parser", Color.DarkBlue);
+            WriteToOutput("Path: " + Path.GetFullPath(openFileDialog1.FileName), Color.DarkBlue);
 
             foreach (String file in openFileDialog1.FileNames)
             {
-                WriteToOutput("\r// " + Path.GetFileName(file), Color.BlueViolet);
+                WriteToOutput("\r*** " + Path.GetFileName(file), Color.DarkRed);
                 try
                 {
                     BinaryReader br = new BinaryReader(File.Open(file, FileMode.Open));
 
                     byte[] byteIn = new byte[br.BaseStream.Length];
                     byteIn = br.ReadBytes(byteIn.Length);
+                    br.Close();
 
                     WriteToOutput("File Size: " + byteIn.Length + " (" + byteIn.Length / 1024 + "k)", Color.DarkRed);
+                    //WriteToOutput("Title: " + Encoding.UTF8.GetString(byteIn, 0, 14), Color.DarkBlue);
+                    //WriteToOutput("Header Len: $" + toU32(byteIn, 0x10).ToString("X8"), Color.DarkBlue);
+                    //WriteToOutput("Ver: " + byteIn[0x14] + "." + byteIn[0x15], Color.DarkBlue);
+                    WriteToOutput("HW Type: " + toU16(byteIn, 0x16) + " ($" + toU16(byteIn, 0x16).ToString("X4") + ")", Color.DarkBlue);
 
-                    byteIn[14] = 0;
-                    WriteToOutput("Title: " + byteIn.ToString(), Color.DarkBlue);
-                    //UInt32 charNum = 0;
-                    //if (file.EndsWith(".64c"))
-                    //{
-                    //    byteIn = br.ReadBytes(2);  //know it will end on 32 bit boundry
-                    //    WriteToOutput("First two bytes: " + byteIn[0] + " and " + byteIn[1], Color.DarkRed);
-                    //}
-                    //
-                    //while (br.BaseStream.Position != br.BaseStream.Length && charNum < Convert.ToUInt32(tbMaxChars.Text))
-                    //{
-                    //    byteIn = br.ReadBytes(8);  //know it will end on an 8 byte boundry?
-                    //    WriteToOutput("Character number " + charNum++, Color.DarkGray);
-                    //    rtbOutput.SelectionColor = Color.Black;
-                    //    for (byte byteNum = 0; byteNum < 8; byteNum++)
-                    //    {
-                    //        for (int bitNum = 7; bitNum >= 0; bitNum--)
-                    //        {
-                    //            if ((byteIn[byteNum] & (1 << bitNum)) == 0)
-                    //                rtbOutput.AppendText(" ");
-                    //            else
-                    //                rtbOutput.AppendText("*");
-                    //        }
-                    //        rtbOutput.AppendText("\r");
-                    //    }
-                    //    WriteToOutput("----------------------------", Color.DarkBlue);
-                    //}
-                    //br.Close();
+
+
+
+
+
+
+                    UInt16 toU16(byte[] data, UInt32 offset)
+                    {
+                        return (UInt16)((data[offset] << 8) | data[offset + 1]);
+                    }
+
+                    UInt32 toU32(byte[] data, UInt32 offset)
+                    {
+                        return (UInt32)((data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3]);
+                    }
+
+                    //WriteToOutput("----------------------------", Color.DarkBlue);
+
 
                 }
                 catch (Exception exc)
