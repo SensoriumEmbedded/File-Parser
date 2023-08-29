@@ -187,12 +187,12 @@ namespace Text_File_Parser
             //openFileDialog1.FileName = Path.GetFileName(tbMEIDFileName.Text);
             if (openFileDialog1.ShowDialog() == DialogResult.Cancel) return;
 
-            WriteToOutput("C64 CRT file parser", Color.DarkBlue);
-            WriteToOutput("Path: " + Path.GetFullPath(openFileDialog1.FileName), Color.DarkBlue);
+            WriteToOutput("C64 CRT file parser", Color.DarkGreen);
+            WriteToOutput("Path: " + Path.GetFullPath(openFileDialog1.FileName) + "\r", Color.DarkGreen);
 
             foreach (String file in openFileDialog1.FileNames)
             {
-                WriteToOutput("\r*** " + Path.GetFileName(file), Color.DarkRed);
+                WriteToOutput("*** " + Path.GetFileName(file), Color.DarkRed);
                 try
                 {
                     BinaryReader br = new BinaryReader(File.Open(file, FileMode.Open));
@@ -201,18 +201,34 @@ namespace Text_File_Parser
                     byteIn = br.ReadBytes(byteIn.Length);
                     br.Close();
 
-                    WriteToOutput("File Size: " + byteIn.Length + " (" + byteIn.Length / 1024 + "k)", Color.DarkRed);
-                    //WriteToOutput("Title: " + Encoding.UTF8.GetString(byteIn, 0, 14), Color.DarkBlue);
-                    //WriteToOutput("Header Len: $" + toU32(byteIn, 0x10).ToString("X8"), Color.DarkBlue);
-                    //WriteToOutput("Ver: " + byteIn[0x14] + "." + byteIn[0x15], Color.DarkBlue);
-                    WriteToOutput("HW Type: " + toU16(byteIn, 0x16) + " ($" + toU16(byteIn, 0x16).ToString("X4") + ")", Color.DarkBlue);
+                    WriteToOutput("File Size: " + byteIn.Length + " (" + byteIn.Length / 1024 + "k)" +
+                        "   HW Type: " + toU16(byteIn, 0x16) + " ($" + toU16(byteIn, 0x16).ToString("X4") + ")", Color.DarkRed);
+                    WriteToOutput("Title: " + Encoding.UTF8.GetString(byteIn, 0, 14) +
+                        "     Name: " + Encoding.UTF8.GetString(byteIn, 0x20, 32), Color.DarkBlue);
+                    WriteToOutput("Header Len: $" + toU32(byteIn, 0x10).ToString("X8") +
+                        "     Ver: " + byteIn[0x14] + "." + byteIn[0x15], Color.DarkBlue);
+                    WriteToOutput("EXROM: " + byteIn[0x18] + "   GAME: " + byteIn[0x19], Color.DarkBlue);
 
+                    UInt32 ChipStart = toU32(byteIn, 0x10); //Start at end of Header
+                    UInt32 NumChips = 0;
 
+                    if (cbChipInfo.Checked) WriteToOutput(" Chp# chip Length    Type  Bank  Addr  Size", Color.Blue);
+                    while (ChipStart < byteIn.Length)
+                    {
+                        if (cbChipInfo.Checked) WriteToOutput(" #" + NumChips.ToString("D3") +
+                            " " + Encoding.UTF8.GetString(byteIn, (int)ChipStart, 4) +
+                            " $" + toU32(byteIn, ChipStart + 0x04).ToString("X8") +
+                            " $" + toU16(byteIn, ChipStart + 0x08).ToString("X4") +  //comment
+                            " $" + toU16(byteIn, ChipStart + 0x0A).ToString("X4") +  // 
+                            " $" + toU16(byteIn, ChipStart + 0x0C).ToString("X4") +
+                            " $" + toU16(byteIn, ChipStart + 0x0E).ToString("X4") 
+                            , Color.Blue);
+                        NumChips++;
+                        ChipStart += toU32(byteIn, ChipStart + 0x04); //add packet length
+                    }
+                    WriteToOutput(NumChips + " Chip(s) found\r", Color.Blue);
 
-
-
-
-
+                    //local functions:
                     UInt16 toU16(byte[] data, UInt32 offset)
                     {
                         return (UInt16)((data[offset] << 8) | data[offset + 1]);
@@ -222,9 +238,6 @@ namespace Text_File_Parser
                     {
                         return (UInt32)((data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3]);
                     }
-
-                    //WriteToOutput("----------------------------", Color.DarkBlue);
-
 
                 }
                 catch (Exception exc)

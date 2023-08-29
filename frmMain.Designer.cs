@@ -38,6 +38,7 @@ namespace Text_File_Parser
             this.label2 = new System.Windows.Forms.Label();
             this.btnClearDisp = new System.Windows.Forms.Button();
             this.btnC64CRTfile = new System.Windows.Forms.Button();
+            this.cbChipInfo = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // rtbOutput
@@ -121,11 +122,22 @@ namespace Text_File_Parser
             this.btnC64CRTfile.UseVisualStyleBackColor = true;
             this.btnC64CRTfile.Click += new System.EventHandler(this.btnC64CRTfile_Click);
             // 
+            // cbChipInfo
+            // 
+            this.cbChipInfo.AutoSize = true;
+            this.cbChipInfo.Location = new System.Drawing.Point(254, 128);
+            this.cbChipInfo.Name = "cbChipInfo";
+            this.cbChipInfo.Size = new System.Drawing.Size(101, 20);
+            this.cbChipInfo.TabIndex = 9;
+            this.cbChipInfo.Text = "Chip Details";
+            this.cbChipInfo.UseVisualStyleBackColor = true;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.cbChipInfo);
             this.Controls.Add(this.btnC64CRTfile);
             this.Controls.Add(this.btnClearDisp);
             this.Controls.Add(this.label2);
@@ -154,6 +166,7 @@ namespace Text_File_Parser
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnClearDisp;
         private System.Windows.Forms.Button btnC64CRTfile;
+        private System.Windows.Forms.CheckBox cbChipInfo;
     }
 }
 
