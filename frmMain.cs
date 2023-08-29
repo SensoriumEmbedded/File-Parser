@@ -201,13 +201,25 @@ namespace Text_File_Parser
                     byteIn = br.ReadBytes(byteIn.Length);
                     br.Close();
 
+                    string HWTypeName, HWConfig;
+                    UInt16 HWTypeNum = toU16(byteIn, 0x16);
+                    if (HWTypeNum <= CartHWTypeName.GetUpperBound(0)) HWTypeName = CartHWTypeName[HWTypeNum];
+                    else HWTypeName = "**Unknown**";
+
+                    byte EXROM = byteIn[0x18];
+                    byte GAME = byteIn[0x19];
+                    if      (EXROM == 0 && GAME == 0) HWConfig = "16k";
+                    else if (EXROM == 0 && GAME == 1) HWConfig = "8kLo";
+                    else if (EXROM == 1 && GAME == 0) HWConfig = "8kHi/Ultimax";
+                    else if (EXROM == 1 && GAME == 1) HWConfig = "*None*";
+                    else HWConfig = "**Unknown**";
+
                     WriteToOutput("File Size: " + byteIn.Length + " (" + byteIn.Length / 1024 + "k)" +
-                        "   HW Type: " + toU16(byteIn, 0x16) + " ($" + toU16(byteIn, 0x16).ToString("X4") + ")", Color.DarkRed);
-                    WriteToOutput("Title: " + Encoding.UTF8.GetString(byteIn, 0, 14) +
-                        "     Name: " + Encoding.UTF8.GetString(byteIn, 0x20, 32), Color.DarkBlue);
+                        " HW Type: " + HWTypeName.TrimEnd(' ') + " (" + HWTypeNum + ")", Color.DarkRed);
+                    WriteToOutput("Sig: " + Encoding.UTF8.GetString(byteIn, 0, 14) +
+                        "  Name: " + Encoding.UTF8.GetString(byteIn, 0x20, 32), Color.DarkBlue);
                     WriteToOutput("Header Len: $" + toU32(byteIn, 0x10).ToString("X8") +
-                        "     Ver: " + byteIn[0x14] + "." + byteIn[0x15], Color.DarkBlue);
-                    WriteToOutput("EXROM: " + byteIn[0x18] + "   GAME: " + byteIn[0x19], Color.DarkBlue);
+                        "  V:" + byteIn[0x14] + "." + byteIn[0x15] + " EX:" + EXROM + " GA:" + GAME + " Config:" + HWConfig, Color.DarkBlue);
 
                     UInt32 ChipStart = toU32(byteIn, 0x10); //Start at end of Header
                     UInt32 NumChips = 0;
@@ -228,17 +240,6 @@ namespace Text_File_Parser
                     }
                     WriteToOutput(NumChips + " Chip(s) found\r", Color.Blue);
 
-                    //local functions:
-                    UInt16 toU16(byte[] data, UInt32 offset)
-                    {
-                        return (UInt16)((data[offset] << 8) | data[offset + 1]);
-                    }
-
-                    UInt32 toU32(byte[] data, UInt32 offset)
-                    {
-                        return (UInt32)((data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3]);
-                    }
-
                 }
                 catch (Exception exc)
                 {
@@ -248,5 +249,99 @@ namespace Text_File_Parser
             }
 
         }
+
+        UInt16 toU16(byte[] data, UInt32 offset)
+        {
+            return (UInt16)((data[offset] << 8) | data[offset + 1]);
+        }
+
+        UInt32 toU32(byte[] data, UInt32 offset)
+        {
+            return (UInt32)((data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3]);
+        }
+
+        string[] CartHWTypeName = new string[] 
+        { 
+            "Generic            ",   //  0  //Supported
+            "ActionReplay       ",   //  1
+            "KCSPowerCartridge  ",   //  2
+            "FinalCartridgeIII  ",   //  3
+            "SimonsBASIC        ",   //  4
+            "Oceantype1         ",   //  5  //Supported
+            "ExpertCartridge    ",   //  6
+            "FunPlayPowerPlay   ",   //  7  //Supported
+            "SuperGames         ",   //  8  //Supported
+            "AtomicPower        ",   //  9
+            "EpyxFastload       ",   // 10  //Supported
+            "WestermannLearning ",   // 11
+            "RexUtility         ",   // 12
+            "FinalCartridgeI    ",   // 13
+            "MagicFormel        ",   // 14
+            "C64GameSystem3     ",   // 15  //Supported
+            "WarpSpeed          ",   // 16
+            "Dinamic            ",   // 17  //Supported
+            "ZaxxonSuperZaxxon  ",   // 18
+            "MagicDesk          ",   // 19  //Supported
+            "SuperSnapshotV5    ",   // 20
+            "Comal80            ",   // 21
+            "StructuredBASIC    ",   // 22
+            "Ross               ",   // 23
+            "DelaEP64           ",   // 24
+            "DelaEP7x8          ",   // 25
+            "DelaEP256          ",   // 26
+            "RexEP256           ",   // 27
+            "MikroAssembler     ",   // 28
+            "FinalCartridgePlus ",   // 29
+            "ActionReplay4      ",   // 30
+            "Stardos            ",   // 31
+            "EasyFlash          ",   // 32
+            "EasyFlashXbank     ",   // 33
+            "Capture            ",   // 34
+            "ActionReplay3      ",   // 35
+            "RetroReplay        ",   // 36
+            "MMC64              ",   // 37
+            "MMCReplay          ",   // 38
+            "IDE64              ",   // 39
+            "SuperSnapshotV4    ",   // 40
+            "IEEE488            ",   // 41
+            "GameKiller         ",   // 42
+            "Prophet64          ",   // 43
+            "EXOS               ",   // 44
+            "FreezeFrame        ",   // 45
+            "FreezeMachine      ",   // 46
+            "Snapshot64         ",   // 47
+            "SuperExplodeV50    ",   // 48
+            "MagicVoice         ",   // 49
+            "ActionReplay2      ",   // 50
+            "MACH5              ",   // 51
+            "DiashowMaker       ",   // 52
+            "Pagefox            ",   // 53
+            "Kingsoft           ",   // 54
+            "Silverrock128K     ",   // 55
+            "Formel64           ",   // 56
+            "RGCD               ",   // 57
+            "RRNetMK3           ",   // 58
+            "EasyCalc           ",   // 59
+            "GMod2              ",   // 60
+            "MAXBasic           ",   // 61
+            "GMod3              ",   // 62
+            "ZIPPCODE48         ",   // 63
+            "BlackboxV8         ",   // 64
+            "BlackboxV3         ",   // 65
+            "BlackboxV4         ",   // 66
+            "REXRAMFloppy       ",   // 67
+            "BISPlus            ",   // 68
+            "SDBOX              ",   // 69
+            "MultiMAX           ",   // 70
+            "BlackboxV9         ",   // 71
+            "LtKernalHostAdaptor",   // 72
+            "RAMLink            ",   // 73
+            "HERO               ",   // 74
+            "IEEEFlash64        ",   // 75
+            "TurtleGraphicsII   ",   // 76
+            "FreezeFrameMK2     ",   // 77
+            "Partner64          ",   // 78
+        };
+
     }
 }
