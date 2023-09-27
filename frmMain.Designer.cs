@@ -39,20 +39,23 @@ namespace Text_File_Parser
             this.btnClearDisp = new System.Windows.Forms.Button();
             this.btnC64CRTfile = new System.Windows.Forms.Button();
             this.cbChipInfo = new System.Windows.Forms.CheckBox();
+            this.btnC64SIDfile = new System.Windows.Forms.Button();
+            this.cbSIDDetails = new System.Windows.Forms.CheckBox();
+            this.cbSIDSummary = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // rtbOutput
             // 
             this.rtbOutput.Font = new System.Drawing.Font("Courier New", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtbOutput.Location = new System.Drawing.Point(12, 173);
+            this.rtbOutput.Location = new System.Drawing.Point(12, 99);
             this.rtbOutput.Name = "rtbOutput";
-            this.rtbOutput.Size = new System.Drawing.Size(776, 265);
+            this.rtbOutput.Size = new System.Drawing.Size(776, 339);
             this.rtbOutput.TabIndex = 0;
             this.rtbOutput.Text = "";
             // 
             // btnThousandTrails
             // 
-            this.btnThousandTrails.Location = new System.Drawing.Point(12, 12);
+            this.btnThousandTrails.Location = new System.Drawing.Point(552, 12);
             this.btnThousandTrails.Name = "btnThousandTrails";
             this.btnThousandTrails.Size = new System.Drawing.Size(236, 23);
             this.btnThousandTrails.TabIndex = 1;
@@ -66,7 +69,7 @@ namespace Text_File_Parser
             // 
             // btnSpiralST3
             // 
-            this.btnSpiralST3.Location = new System.Drawing.Point(12, 41);
+            this.btnSpiralST3.Location = new System.Drawing.Point(552, 41);
             this.btnSpiralST3.Name = "btnSpiralST3";
             this.btnSpiralST3.Size = new System.Drawing.Size(236, 49);
             this.btnSpiralST3.TabIndex = 2;
@@ -76,7 +79,7 @@ namespace Text_File_Parser
             // 
             // btnC64CharSet
             // 
-            this.btnC64CharSet.Location = new System.Drawing.Point(12, 96);
+            this.btnC64CharSet.Location = new System.Drawing.Point(12, 12);
             this.btnC64CharSet.Name = "btnC64CharSet";
             this.btnC64CharSet.Size = new System.Drawing.Size(236, 23);
             this.btnC64CharSet.TabIndex = 3;
@@ -86,7 +89,7 @@ namespace Text_File_Parser
             // 
             // tbMaxChars
             // 
-            this.tbMaxChars.Location = new System.Drawing.Point(254, 97);
+            this.tbMaxChars.Location = new System.Drawing.Point(254, 13);
             this.tbMaxChars.MaxLength = 10;
             this.tbMaxChars.Name = "tbMaxChars";
             this.tbMaxChars.Size = new System.Drawing.Size(40, 22);
@@ -96,7 +99,7 @@ namespace Text_File_Parser
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(300, 100);
+            this.label2.Location = new System.Drawing.Point(300, 16);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(68, 16);
             this.label2.TabIndex = 6;
@@ -104,7 +107,7 @@ namespace Text_File_Parser
             // 
             // btnClearDisp
             // 
-            this.btnClearDisp.Location = new System.Drawing.Point(376, 144);
+            this.btnClearDisp.Location = new System.Drawing.Point(462, 70);
             this.btnClearDisp.Name = "btnClearDisp";
             this.btnClearDisp.Size = new System.Drawing.Size(69, 23);
             this.btnClearDisp.TabIndex = 7;
@@ -114,7 +117,7 @@ namespace Text_File_Parser
             // 
             // btnC64CRTfile
             // 
-            this.btnC64CRTfile.Location = new System.Drawing.Point(12, 125);
+            this.btnC64CRTfile.Location = new System.Drawing.Point(12, 41);
             this.btnC64CRTfile.Name = "btnC64CRTfile";
             this.btnC64CRTfile.Size = new System.Drawing.Size(236, 23);
             this.btnC64CRTfile.TabIndex = 8;
@@ -125,18 +128,54 @@ namespace Text_File_Parser
             // cbChipInfo
             // 
             this.cbChipInfo.AutoSize = true;
-            this.cbChipInfo.Location = new System.Drawing.Point(254, 128);
+            this.cbChipInfo.Location = new System.Drawing.Point(254, 44);
             this.cbChipInfo.Name = "cbChipInfo";
             this.cbChipInfo.Size = new System.Drawing.Size(101, 20);
             this.cbChipInfo.TabIndex = 9;
             this.cbChipInfo.Text = "Chip Details";
             this.cbChipInfo.UseVisualStyleBackColor = true;
             // 
+            // btnC64SIDfile
+            // 
+            this.btnC64SIDfile.Location = new System.Drawing.Point(12, 70);
+            this.btnC64SIDfile.Name = "btnC64SIDfile";
+            this.btnC64SIDfile.Size = new System.Drawing.Size(236, 23);
+            this.btnC64SIDfile.TabIndex = 10;
+            this.btnC64SIDfile.Text = "C64 SID file";
+            this.btnC64SIDfile.UseVisualStyleBackColor = true;
+            this.btnC64SIDfile.Click += new System.EventHandler(this.btnC64SIDfile_Click);
+            // 
+            // cbSIDDetails
+            // 
+            this.cbSIDDetails.AutoSize = true;
+            this.cbSIDDetails.Location = new System.Drawing.Point(346, 73);
+            this.cbSIDDetails.Name = "cbSIDDetails";
+            this.cbSIDDetails.Size = new System.Drawing.Size(71, 20);
+            this.cbSIDDetails.TabIndex = 11;
+            this.cbSIDDetails.Text = "Details";
+            this.cbSIDDetails.UseVisualStyleBackColor = true;
+            // 
+            // cbSIDSummary
+            // 
+            this.cbSIDSummary.AutoSize = true;
+            this.cbSIDSummary.Checked = true;
+            this.cbSIDSummary.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbSIDSummary.Location = new System.Drawing.Point(254, 73);
+            this.cbSIDSummary.Name = "cbSIDSummary";
+            this.cbSIDSummary.Size = new System.Drawing.Size(86, 20);
+            this.cbSIDSummary.TabIndex = 12;
+            this.cbSIDSummary.Text = "Summary";
+            this.cbSIDSummary.UseVisualStyleBackColor = true;
+            this.cbSIDSummary.CheckedChanged += new System.EventHandler(this.cbSIDSummary_CheckedChanged);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.cbSIDSummary);
+            this.Controls.Add(this.cbSIDDetails);
+            this.Controls.Add(this.btnC64SIDfile);
             this.Controls.Add(this.cbChipInfo);
             this.Controls.Add(this.btnC64CRTfile);
             this.Controls.Add(this.btnClearDisp);
@@ -167,6 +206,9 @@ namespace Text_File_Parser
         private System.Windows.Forms.Button btnClearDisp;
         private System.Windows.Forms.Button btnC64CRTfile;
         private System.Windows.Forms.CheckBox cbChipInfo;
+        private System.Windows.Forms.Button btnC64SIDfile;
+        private System.Windows.Forms.CheckBox cbSIDDetails;
+        private System.Windows.Forms.CheckBox cbSIDSummary;
     }
 }
 
